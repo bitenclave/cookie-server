@@ -12,18 +12,48 @@ Use `cookie-editor` for the browser extension and `cookie-server` when you want
 saved cookie profiles to sync through your own server instead of local browser
 extension storage.
 
-## Why the table is wider than two columns
+## Run a Release Build
 
-The server still stores cookies as a JSONB array in one `profiles` table, but a
-two-column `name + cookies` table makes search, grouping, sync, and future
-conflict handling weak. The implemented schema adds profile metadata:
+If you only want to run the server, download a compiled build from:
 
-- `id`, `name`, `group_name`
-- `cookies` JSONB
-- `cookie_count`, `domains`, `tags`
-- `created_at`, `updated_at`
+https://github.com/bitenclave/cookie-server/releases
 
-This keeps cookie storage simple while making profile search and filtering fast.
+The release workflow builds standalone binaries for:
+
+- `cookie-server-windows.exe` for Windows x64
+- `cookie-server-linux` for Linux x64
+- `cookie-server-macos-x64` for macOS Intel
+- `cookie-server-macos-arm` for macOS Apple Silicon
+
+These builds let you run `cookie-server` without installing Node.js, Bun, npm,
+or project dependencies. You still need a PostgreSQL database.
+
+Create a `.env` file in the directory where you run the binary, or set the same
+values as environment variables:
+
+```env
+DATABASE_URL=postgres://user:password@host:5432/database
+AUTH_TOKEN=replace-with-a-long-random-token
+PORT=8787
+```
+
+Then run the binary:
+
+```sh
+./cookie-server-linux
+```
+
+On Windows PowerShell:
+
+```powershell
+.\cookie-server-windows.exe
+```
+
+For PostgreSQL, you can use a hosted database such as
+[Neon](https://neon.tech/), [Supabase](https://supabase.com/), or
+[Aiven](https://aiven.io/free-postgresql-database). Power users can also
+install PostgreSQL locally from https://www.postgresql.org/download/ and use a
+local `DATABASE_URL`.
 
 ## Local Development
 
