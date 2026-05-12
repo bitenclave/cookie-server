@@ -8,6 +8,8 @@ const DEFAULT_GROUP = 'Default';
 export function toProfileInsert(input: ProfileInput): ProfileInsert {
   const now = new Date();
   const cookies = input.cookies || [];
+  const createdAt = parseProfileDate(input.createdAt) || now;
+  const updatedAt = parseProfileDate(input.updatedAt) || createdAt;
   return {
     id: input.id || randomUUID(),
     name: input.name.trim(),
@@ -16,8 +18,8 @@ export function toProfileInsert(input: ProfileInput): ProfileInsert {
     cookieCount: cookies.length,
     domains: extractDomains(cookies),
     tags: normalizeTags(input.tags),
-    createdAt: now,
-    updatedAt: now,
+    createdAt,
+    updatedAt,
   };
 }
 
@@ -65,4 +67,9 @@ function normalizeTags(tags?: string[]): string[] {
   }
   const cleaned = tags.map(tag => tag.trim()).filter(Boolean);
   return [...new Set(cleaned)].slice(0, 20);
+}
+
+function parseProfileDate(value?: string): Date | null {
+  const date = new Date(value || '');
+  return Number.isNaN(date.getTime()) ? null : date;
 }

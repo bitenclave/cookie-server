@@ -14,12 +14,14 @@ export type StoredCookie = {
 };
 
 export type ProfileInput = {
+  createdAt?: string;
   cookies: StoredCookie[];
   group?: string;
   groupName?: string;
   id?: string;
   name: string;
   tags?: string[];
+  updatedAt?: string;
 };
 
 export type ProfileDto = {

@@ -17,12 +17,14 @@ const cookieSchema = z
   .passthrough();
 
 export const profilePayloadSchema = z.object({
+  createdAt: z.string().datetime().optional(),
   id: z.string().uuid().optional(),
   name: z.string().trim().min(1).max(120),
   group: z.string().trim().max(80).optional(),
   groupName: z.string().trim().max(80).optional(),
   cookies: z.array(cookieSchema).max(5000),
   tags: z.array(z.string().trim().min(1).max(40)).max(20).optional(),
+  updatedAt: z.string().datetime().optional(),
 });
 
 export const replaceProfilesSchema = z.object({
